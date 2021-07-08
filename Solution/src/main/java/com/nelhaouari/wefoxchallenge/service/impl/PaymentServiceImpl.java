@@ -6,6 +6,8 @@ import com.nelhaouari.wefoxchallenge.service.PaymentLoggerService;
 import com.nelhaouari.wefoxchallenge.service.PaymentMapper;
 import com.nelhaouari.wefoxchallenge.service.PaymentService;
 import com.nelhaouari.wefoxchallenge.service.PaymentServiceException;
+import com.nelhaouari.wefoxchallenge.service.impl.db.entity.AccountEntity;
+import com.nelhaouari.wefoxchallenge.service.impl.db.repository.AccountRepository;
 import com.nelhaouari.wefoxchallenge.service.impl.db.repository.PaymentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -27,12 +30,15 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     private PaymentRepository paymentRepository;
     @Autowired
+    private AccountRepository accountRepository;
+    @Autowired
     private PaymentMapper paymentMapper;
 
     @Override
     public void handleIncomingPayment(PaymentDTO paymentDTO) {
         try {
-            isPaymentValid(paymentDTO);
+            validatePaymentDTO(paymentDTO);
+            validatePaymentGatewayResponse(paymentDTO);
             storePayment(paymentDTO);
         } catch (PaymentServiceException e) {
             sendLogError(preparePaymentErrorObject(paymentDTO, e));
@@ -57,15 +63,21 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Transactional
-    void storePayment(PaymentDTO paymentDTO) {
+    void storePayment(PaymentDTO paymentDTO) throws PaymentServiceException {
+        logger.info("Saving payment record ...");
+        AccountEntity accountEntity = accountRepository.getById(paymentDTO.getAccount_id());
+        if (accountEntity == null)
+            throw new PaymentServiceException(PaymentServiceException.TYPE_DATABASE, "The account_id not found");
         paymentRepository.save(paymentMapper.mapPayment(paymentDTO));
+
+        accountEntity.setLast_payment_date(new Date());
+        accountRepository.save(accountEntity);
+
+        logger.info("Payment saved");
     }
 
     @Override
-    public boolean isPaymentValid(PaymentDTO paymentDTO) throws PaymentServiceException {
-        if (paymentDTO == null)
-            throw new PaymentServiceException(PaymentServiceException.TYPE_DATA, "bad request");
-
+    public void validatePaymentGatewayResponse(PaymentDTO paymentDTO) throws PaymentServiceException {
         logger.info("Checking payment is valid ...");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -81,13 +93,21 @@ public class PaymentServiceImpl implements PaymentService {
                     String.class);
             logger.info("Payment checked: " + response.getStatusCode());
             if( !response.getStatusCode().is2xxSuccessful() ){
-                throw new PaymentServiceException(PaymentServiceException.TYPE_RESPONSE_NOT_OK, "Payment response not OK");
+                throw new PaymentServiceException(PaymentServiceException.TYPE_NETWORK, "Payment response not OK");
             }
-            return true;
         } catch (HttpStatusCodeException e) {
             logger.info("Exception on payment api");
             throw new PaymentServiceException(PaymentServiceException.TYPE_NETWORK, e.getResponseBodyAsString());
         }
+    }
+
+    void validatePaymentDTO(PaymentDTO paymentDTO) throws PaymentServiceException {
+        if (paymentDTO == null)
+            throw new PaymentServiceException(PaymentServiceException.TYPE_OTHER, "bad request : payment is null");
+        if (paymentDTO.getPayment_id() == null)
+            throw new PaymentServiceException(PaymentServiceException.TYPE_OTHER, "bad request : payment_id is null");
+        if (paymentDTO.getAccount_id() == null)
+            throw new PaymentServiceException(PaymentServiceException.TYPE_OTHER, "bad request : account_id is null");
     }
 
 }

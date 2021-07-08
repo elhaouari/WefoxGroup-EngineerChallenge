@@ -25,11 +25,14 @@ public class PaymentLoggerServiceImpl implements PaymentLoggerService {
 
         RestTemplate restTemplate = new RestTemplate();
         String HOST_PAYMENT_LOGGER = "http://localhost:9000/log";
-        restTemplate.exchange(HOST_PAYMENT_LOGGER,
-                HttpMethod.POST,
-                entity,
-                String.class);
-
-        logger.info("error sent ");
+        try {
+            restTemplate.postForLocation(HOST_PAYMENT_LOGGER,
+                    HttpMethod.POST,
+                    entity,
+                    String.class);
+        } catch (Exception e) {
+            logger.error("Service Logger error : " + e.getMessage());
+        }
+        logger.info("error sent");
     }
 }

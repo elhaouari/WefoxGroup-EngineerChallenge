@@ -3,10 +3,15 @@ package com.nelhaouari.wefoxchallenge.service.impl;
 import com.nelhaouari.wefoxchallenge.model.PaymentDTO;
 import com.nelhaouari.wefoxchallenge.service.PaymentMapper;
 import com.nelhaouari.wefoxchallenge.service.impl.db.entity.PaymentEntity;
+import com.nelhaouari.wefoxchallenge.service.impl.db.repository.AccountRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PaymentMapperServiceImpl implements PaymentMapper {
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     @Override
     public PaymentEntity mapPayment(PaymentDTO paymentDTO) {
@@ -18,4 +23,5 @@ public class PaymentMapperServiceImpl implements PaymentMapper {
         paymentEntity.setCredit_card(paymentDTO.getCredit_card());
         return paymentEntity;
     }
+
 }

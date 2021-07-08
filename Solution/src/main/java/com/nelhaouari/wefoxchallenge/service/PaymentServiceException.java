@@ -4,8 +4,8 @@ public class PaymentServiceException extends Exception{
     public static String TYPE_GENERAL_ERROR = "General error";
     public static String TYPE_GENERAL_ERROR_MSG = "unexpected error";
     public static String TYPE_NETWORK = "network";
-    public static String TYPE_DATA = "payload";
-    public static String TYPE_RESPONSE_NOT_OK = "Response is not OK";
+    public static String TYPE_DATABASE = "database";
+    public static String TYPE_OTHER = "other";
 
     private String code;
 

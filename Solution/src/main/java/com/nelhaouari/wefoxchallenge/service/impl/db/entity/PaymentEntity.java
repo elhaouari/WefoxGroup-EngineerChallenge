@@ -8,7 +8,7 @@ import java.util.Objects;
 public class PaymentEntity {
     @Id
     private String payment_id;
-    private Integer account_id;
+    private String account_id;
     private String payment_type;
     private String credit_card;
     private Double amount;
@@ -45,11 +45,11 @@ public class PaymentEntity {
         this.payment_id = payment_id;
     }
 
-    public Integer getAccount_id() {
+    public String getAccount_id() {
         return account_id;
     }
 
-    public void setAccount_id(Integer account_id) {
+    public void setAccount_id(String account_id) {
         this.account_id = account_id;
     }
 

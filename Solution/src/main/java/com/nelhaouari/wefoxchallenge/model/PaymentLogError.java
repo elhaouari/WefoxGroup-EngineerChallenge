@@ -28,4 +28,13 @@ public class PaymentLogError {
     public void setError_description(String error_description) {
         this.error_description = error_description;
     }
+
+    @Override
+    public String toString() {
+        return "PaymentLogError{" +
+                "payment_id='" + payment_id + '\'' +
+                ", error_type='" + error_type + '\'' +
+                ", error_description='" + error_description + '\'' +
+                '}';
+    }
 }

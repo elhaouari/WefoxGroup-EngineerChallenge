@@ -4,8 +4,8 @@ import com.nelhaouari.wefoxchallenge.model.PaymentDTO;
 
 public interface PaymentService {
 
-    public void handleIncomingPayment(PaymentDTO payment);
+    void handleIncomingPayment(PaymentDTO payment);
 
-    public boolean isPaymentValid(PaymentDTO payment) throws PaymentServiceException;
+    void validatePaymentGatewayResponse(PaymentDTO payment) throws PaymentServiceException;
 
 }
