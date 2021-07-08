@@ -1,13 +1,13 @@
-package com.nelhaouari.wefoxchallange;
+package com.nelhaouari.wefoxchallenge;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class WefoxChallangeApplication {
+public class WefoxChallengeApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(WefoxChallangeApplication.class, args);
+        SpringApplication.run(WefoxChallengeApplication.class, args);
     }
 
 }

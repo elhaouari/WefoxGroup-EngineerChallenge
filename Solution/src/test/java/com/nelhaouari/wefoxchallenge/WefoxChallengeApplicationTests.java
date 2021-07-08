@@ -1,10 +1,10 @@
-package com.nelhaouari.wefoxchallange;
+package com.nelhaouari.wefoxchallenge;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class WefoxChallangeApplicationTests {
+public class WefoxChallengeApplicationTests {
 
     @Test
     void contextLoads() {
