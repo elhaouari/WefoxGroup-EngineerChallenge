@@ -2,7 +2,7 @@ package com.nelhaouari.wefoxchallenge.model;
 
 import java.util.Objects;
 
-public class Payment {
+public class PaymentDTO {
     private String payment_id;
     private Integer account_id;
     private String payment_type;
@@ -25,7 +25,7 @@ public class Payment {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Payment payment = (Payment) o;
+        PaymentDTO payment = (PaymentDTO) o;
         return Objects.equals(payment_id, payment.payment_id) && Objects.equals(account_id, payment.account_id) && Objects.equals(payment_type, payment.payment_type) && Objects.equals(credit_card, payment.credit_card) && Objects.equals(amount, payment.amount);
     }
 
