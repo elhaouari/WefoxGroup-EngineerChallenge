@@ -1,12 +1,22 @@
 ### :computer: How to execute
 
-_Provide a description of how to run/execute your program..._
+run all containers using the command
+
+```docker-compose up```
+
+when all containers are running, you can send an event using the following command
+
+``docker exec -it container_name: mycontainername kafka-console-producer.sh --bootstrap-server localhost:9092 --topic online``
+
+send some payment event in JSON format, the consumer will handle it 
 
 ### :memo: Notes
 
-_Some notes or explaination of your solution..._
+The solution is based on ``Spring boot``, ``Spring cloud stream`` and ``kafka-stream`` framework
 
-### :pushpin: Things to improve
+The project contains the consumer class ``PaymentKafkaConsumer`` who will accept the kafka stream event and send it to the service classes to be handle
 
-_If u have more time or want to improve somthing..._
+
+
+
 

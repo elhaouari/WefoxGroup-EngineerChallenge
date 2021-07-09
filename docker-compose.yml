@@ -15,6 +15,7 @@ services:
       - ALLOW_ANONYMOUS_LOGIN=yes
   kafka-server:
     image: 'wurstmeister/kafka:latest'
+    container_name: kafka-server
     networks:
       - kafka-net
     ports:
@@ -53,12 +54,14 @@ services:
     depends_on:
       - postgress
       - kafka-server
-  spring-boott:
+  spring-boot:
     build: ./Solution
     ports:
       - "9090:9090"
     volumes:
       - ./Solution/:/usr/src/wefox_solution_consumer
+    networks:
+      - kafka-net
     depends_on:
       - postgress
       - kafka-server

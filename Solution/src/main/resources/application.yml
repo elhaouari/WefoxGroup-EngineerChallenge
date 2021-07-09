@@ -15,4 +15,4 @@ spring:
                 deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       binder:
         brokers:
-          - localhost:9092
+          - kafka-server:9092
