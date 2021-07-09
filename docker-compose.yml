@@ -53,3 +53,12 @@ services:
     depends_on:
       - postgress
       - kafka-server
+  spring-boott:
+    build: ./Solution
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./Solution/:/usr/src/wefox_solution_consumer
+    depends_on:
+      - postgress
+      - kafka-server
